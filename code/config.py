@@ -1,4 +1,4 @@
-MAX_LEN=300
+MAX_LEN=50
 neg_table_size=1000000
 NEG_SAMPLE_POWER=0.75
 batch_size=64

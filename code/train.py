@@ -1,6 +1,6 @@
 import numpy as np
 import tensorflow as tf
-import progressbar
+import sys
 import config
 import rescane
 from DataSet import dataSet
@@ -17,15 +17,17 @@ data = dataSet(text_path, graph_path)
 with tf.Graph().as_default():
     sess = tf.Session()
     with sess.as_default():
-        model = rescane.Model(data.num_vocab, data.num_nodes)
+        model = rescane.Modelv2(data.num_vocab, data.num_nodes)
         opt = tf.train.AdamOptimizer(config.lr)
         train_op = opt.minimize(model.loss)
         sess.run(tf.global_variables_initializer())
-
+        saver = tf.train.Saver()
         # training
         print('start training.......')
-
+        saver.recover_last_checkpoints("/ckpt/model.ckpt")
         for epoch in range(config.num_epoch):
+            if epoch % 10 == 0:
+                saver.save(sess, "/ckpt/model.ckpt")
             loss_epoch = 0
             batches = data.generate_batches()
             h1 = 0
@@ -37,6 +39,7 @@ with tf.Graph().as_default():
                 node1, node2, node3 = zip(*batch)
                 node1, node2, node3 = np.array(node1), np.array(node2), np.array(node3)
                 text1, text2, text3 = data.text[node1], data.text[node2], data.text[node3]
+                sen1, sen2, sen3 = data.sentiment[node1], data.sentiment[node2], data.sentiment[node3]
 
                 feed_dict = {
                     model.Text_a: text1,
@@ -44,12 +47,16 @@ with tf.Graph().as_default():
                     model.Text_neg: text3,
                     model.Node_a: node1,
                     model.Node_b: node2,
-                    model.Node_neg: node3
+                    model.Node_neg: node3,
+                    model.sentiment_a: sen1,
+                    model.sentiment_b: sen2,
+                    model.sentiment_neg: sen3
                 }
 
                 # run the graph
                 _, loss_batch = sess.run([train_op, model.loss], feed_dict=feed_dict)
-
+                sys.stdout.flush()
+                sys.stdout.write("Batch: {}/{}, loss: {}\r".format(i, num_batch, loss_batch))
                 loss_epoch += loss_batch
             print('epoch: ', epoch + 1, ' loss: ', loss_epoch)
 

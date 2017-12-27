@@ -34,8 +34,8 @@ class Model:
         self.convA,self.convB,self.convNeg=self.conv()
         self.loss=self.compute_loss()
     def conv(self):
-        W2=tf.Variable(tf.truncated_normal([2,config.embed_size/2,1,100],stddev=0.3))
-        rand_matrix=tf.Variable(tf.truncated_normal([100,100],stddev=0.3))
+        W2=tf.Variable(tf.truncated_normal([2, config.embed_size/2, 1, 100], stddev=0.3))
+        rand_matrix=tf.Variable(tf.truncated_normal([100, 100], stddev=0.3))
 
         convA=tf.nn.conv2d(self.T_A,W2,strides=[1,1,1,1],padding='VALID')        
         convB=tf.nn.conv2d(self.T_B,W2,strides=[1,1,1,1],padding='VALID')

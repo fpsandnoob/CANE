@@ -6,7 +6,7 @@ f = open('embed.txt', 'rb')
 for i, j in enumerate(f):
     if str(j, encoding='utf-8') != '\n':
         node2vec[i] = list(map(float, str(j, encoding='utf-8').strip().split(' ')))
-f1 = open('test_graph.txt', 'rb')
+# f1 = open('test_graph.txt', 'rb')
 edges = []
 graph_file = open("../datasets/{}/graph.txt".format("zhihu"), "rb").readlines()
 for i in graph_file:

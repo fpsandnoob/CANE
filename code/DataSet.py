@@ -12,13 +12,15 @@ import random
 
 
 class dataSet:
-    def __init__(self, text_path, graph_path):
+    def __init__(self, text_path, graph_path, sentiment_file):
 
         text_file, graph_file = self.load(text_path, graph_path)
 
         self.edges = self.load_edges(graph_file)
 
         self.text, self.num_vocab, self.num_nodes = self.load_text(text_file)
+
+        self.sentiment = self.load_sentiment(sentiment_file)
 
         self.negative_table = InitNegTable(self.edges)
 
@@ -42,6 +44,11 @@ class dataSet:
         num_nodes = len(text)
 
         return text, num_vocab, num_nodes
+
+    def load_sentiment(self, sentiment_file):
+        sentiment = np.array(list(map(str, sentiment_file)))
+
+        return sentiment
 
     def negative_sample(self, edges):
         node1, node2 = zip(*edges)

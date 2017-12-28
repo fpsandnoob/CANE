@@ -2,18 +2,13 @@ import random
 import numpy as np
 
 node2vec = {}
-f = open('embed.txt', 'rb')
+f = open('embed_55_cane.txt', 'r')
 for i, j in enumerate(f):
-    if str(j, encoding='utf-8') != '\n':
-        node2vec[i] = list(map(float, str(j, encoding='utf-8').strip().split(' ')))
-# f1 = open('test_graph.txt', 'rb')
-edges = []
-graph_file = open("../datasets/{}/graph.txt".format("zhihu"), "rb").readlines()
-for i in graph_file:
-    edges.append(list(map(int, str(i.strip(), encoding='utf-8').replace("\r\n", "").split('\t'))))
-# print(edges)
+    if j != '\n':
+        node2vec[i] = list(map(float, j.strip().split(' ')))
+f1 = open('graph.txt', 'r')
+edges = [list(map(int, i.strip().split('\t'))) for i in f1]
 nodes = list(set([i for j in edges for i in j]))
-print(nodes)
 a = 0
 b = 0
 for i, j in edges:

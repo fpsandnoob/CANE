@@ -12,9 +12,9 @@ import random
 
 
 class dataSet:
-    def __init__(self, text_path, graph_path, sentiment_file):
+    def __init__(self, text_path, graph_path, sentiment_path):
 
-        text_file, graph_file = self.load(text_path, graph_path)
+        text_file, graph_file, sentiment_file = self.load(text_path, graph_path, sentiment_path)
 
         self.edges = self.load_edges(graph_file)
 
@@ -24,11 +24,12 @@ class dataSet:
 
         self.negative_table = InitNegTable(self.edges)
 
-    def load(self, text_path, graph_path):
+    def load(self, text_path, graph_path, sentiment_path):
         text_file = open(text_path, 'rb').readlines()
         graph_file = open(graph_path, 'rb').readlines()
+        sentiment_file = open(sentiment_path).readlines()
 
-        return text_file, graph_file
+        return text_file, graph_file, sentiment_file
 
     def load_edges(self, graph_file):
         edges = []
@@ -83,5 +84,6 @@ class dataSet:
 if __name__ == '__main__':
     graph_path = '../datasets/{}/graph.txt'.format("zhihu")
     text_path = '../datasets/{}/data.txt'.format("zhihu")
-    c = dataSet(text_path, graph_path)
-    print(c.load_edges(graph_path))
+    sentiments_path = '../datasets/{}/sentiments.txt'.format("zhihu")
+    c = dataSet(text_path, graph_path, sentiments_path)
+    print(c.sentiment)

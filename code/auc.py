@@ -11,7 +11,9 @@ edges = []
 graph_file = open("../datasets/{}/graph.txt".format("zhihu"), "rb").readlines()
 for i in graph_file:
     edges.append(list(map(int, str(i.strip(), encoding='utf-8').replace("\r\n", "").split('\t'))))
+# print(edges)
 nodes = list(set([i for j in edges for i in j]))
+print(nodes)
 a = 0
 b = 0
 for i, j in edges:
